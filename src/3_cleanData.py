@@ -8,6 +8,7 @@
 
 import sys
 import argparse
+import pandas as pd
 
 def main():
 
@@ -18,13 +19,19 @@ def main():
 
 	# import raw data
 	infname = args.tempDir + inbname + '.csv'	# input file name
-	print(infname)
-	infstream = open(infname, 'r')	# input file stream
+	raw_data = pd.read_csv(infname)				# import as pandas dataframe
+	print(raw_data.head())
 
-
+	# -PERFORMING QUALITY CHECKS-
 	# catch missing values
 
+	# check column consistency
+
+	# check logical inconsistencies
+
 	# ...
+
+	# -END OF QUALITY CHECKS-
 
 	# output cleaned file
 

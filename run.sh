@@ -12,13 +12,15 @@ source ./config.sh
 #
 #	Pipeline
 #
+# enter python virtual enviroment:
+source ${pev}bin/activate
 
 # 1. send data request to REDCap
 
 # 2. download raw data
 
 # 3. clean data
-python ${src}3_cleanData.py \
+python3 ${src}3_cleanData.py \
 	--tempDir ${dat} \
 	--repDir ${rep}
 
@@ -27,3 +29,6 @@ python ${src}3_cleanData.py \
 # 5. send clean data to SIA database
 
 # 6. distribute quality reports
+
+# exit python virtual enviroment:
+deactivate
