@@ -6,5 +6,6 @@ dat=${database}data/
 src=${database}src/
 tst=${database}test/
 rep=${database}reports/
+# python virtual enviroment:
 pve=${database}env/
 

@@ -10,7 +10,7 @@ import sys
 import argparse
 import pandas as pd
 
-import dataQuality
+import dataQuality, checklist
 
 def main():
 
@@ -24,7 +24,7 @@ def main():
 	data = pd.read_csv(infname)					# import as pandas dataframe
 
 	# initialize summary object
-	summary_info = dataQuality.create_empty_checklist()
+	summary_info = checklist.create_empty_checklist()
 
 	# -PERFORMING QUALITY CHECKS-
 	
@@ -42,13 +42,17 @@ def main():
 
 	dataQuality.timeliness(data, summary_info, args)
 
+	dataQuality.missingValues(data, summary_info, args)
+
 	# -END OF QUALITY CHECKS-
 
-	print(summary_info.n_base_elements)
-	print(summary_info.n_std_elements)
-	print(summary_info.n_elements)
+	# print data cleaning summary reports
+
+	summary_info.write_long_report(args.repDir + 'cleaningReport.long.md')
 
 	# output cleaned file
+	outfname = args.tempDir + outbname + '.csv' # output file name
+	data.to_csv(outfname)
 
 
 #
@@ -75,5 +79,6 @@ def getShellArguments():
 #
 #  Boilerplate
 #
+
 if __name__ == '__main__':
 	main()

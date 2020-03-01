@@ -1,29 +1,25 @@
-class Checklist:
-	# SickleInAfrica base data elements
-	SIA_BASE_ELEMENTS = [
-		'age_at_enrollment',
-		'age_at_today',
-		'marital_status',
-		'sex',
-		'year_of_diagnosis'
-	]
-	# SickleInAfrica standard data elements
-	SIA_STD_ELEMENTS = SIA_BASE_ELEMENTS + [] 
+#
+#	SADaCC Data quality module
+#
+#################################
+'''
+The general idea behind this module is that
+it is a list of functions, each addressing a 
+different dimension of data quality. 
 
-	def __init__(
-			self,
-			n_base_elements,
-			n_std_elements,
-			n_elements):
-		self.n_base_elements = n_base_elements
-		self.n_std_elements = n_std_elements
-		self.n_elements = n_elements
+All functions in this module take as input:
+	data :: a dataframe containing the pulled data
+	summary_info :: a Checklist object containing
+		all info on the data cleaning process
+	args :: a ll arguments passed to the python 
+		script from the bash wrapper.
 
+Each function:
++ performs a set of data quality checks, 
++ saves	the results in the summary_info object
++ performs cleaning by modifying the data set inplace.
 
-def create_empty_checklist():
-
-	return Checklist(0,0,0)
-
+'''
 
 def completeness(data, summary_info, args):
 	'''
@@ -75,8 +71,8 @@ def integrity(data, summary_info, args):
 	'''
 	Integrity metric
 
-	Description:
-	Concrete measure:
+	Description: Are the relations between entities and attributes consistent
+	Concrete measure: Provide the number of data elements consistent with its value or content
 
 	'''
 	pass
@@ -96,19 +92,31 @@ def consistency(data, summary_info, args):
 	'''
 	Consistency metric
 
-	Description:
-	Concrete measure:
+	Description: Are there duplicate records? (Redundancy checks)
+	Concrete measure: Provide the number of duplicated records detected
 
 	'''
-	pass
+	duplicatedRows = data[data.duplicated()]
+	summary_info.n_duplicates = len(duplicatedRows)
+	data.drop_duplicates(keep='first', inplace=True)
 
 
 def timeliness(data, summary_info, args):
 	'''
-	Integrity metric
+	timeless metric
 
-	Description:
-	Concrete measure:
+	Description: Is data available for transfer to the central database in a timely manner?
+	Concrete measure: Provide the quantity of records transferred with respect to indicators
 
 	'''
 	pass
+
+
+def missingValues(data, summary_info, args):
+	'''
+	Summarise the missing values in the input raw data file
+	'''
+	# number of values missing:
+	summary_info.n_missing_values = data.isnull().sum().sum()
+	summary_info.frac_missing \
+		= summary_info.n_missing_values / (len(data.columns) * len(data))
