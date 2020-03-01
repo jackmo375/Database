@@ -10,6 +10,8 @@ import sys
 import argparse
 import pandas as pd
 
+import dataQuality
+
 def main():
 
 	inbname   = 'raw' 	# input file base name
@@ -19,19 +21,32 @@ def main():
 
 	# import raw data
 	infname = args.tempDir + inbname + '.csv'	# input file name
-	raw_data = pd.read_csv(infname)				# import as pandas dataframe
-	print(raw_data.head())
+	data = pd.read_csv(infname)					# import as pandas dataframe
+
+	# initialize summary object
+	summary_info = dataQuality.create_empty_checklist()
 
 	# -PERFORMING QUALITY CHECKS-
-	# catch missing values
+	
+	dataQuality.completeness(data, summary_info, args)
 
-	# check column consistency
+	dataQuality.validity(data, summary_info, args)
 
-	# check logical inconsistencies
+	dataQuality.integrability(data, summary_info, args)
 
-	# ...
+	dataQuality.integrity(data, summary_info, args)
+
+	dataQuality.accuracy(data, summary_info, args)
+
+	dataQuality.consistency(data, summary_info, args)
+
+	dataQuality.timeliness(data, summary_info, args)
 
 	# -END OF QUALITY CHECKS-
+
+	print(summary_info.n_base_elements)
+	print(summary_info.n_std_elements)
+	print(summary_info.n_elements)
 
 	# output cleaned file
 
@@ -56,7 +71,6 @@ def getShellArguments():
 		help='path to temporary quality reports storage directory')
 
 	return parser.parse_args()
-
 
 #
 #  Boilerplate

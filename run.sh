@@ -13,7 +13,7 @@ source ./config.sh
 #	Pipeline
 #
 # enter python virtual enviroment:
-source ${pev}bin/activate
+source ${pve}bin/activate
 
 # 1. send data request to REDCap
 
