@@ -6,6 +6,11 @@ dat=${database}data/
 src=${database}src/
 tst=${database}test/
 rep=${database}reports/
-# python virtual enviroment:
 pve=${database}env/
+sql=${database}mysql/
 
+# SQL database info:
+dbName=sia
+
+# data cleaning parameters:
+maxAge=10

@@ -12,6 +12,19 @@ import pandas as pd
 
 import dataQuality, checklist
 
+SIA_BASE_ELEMENTS = [
+	'age_at_enrollment',
+	'age_at_today',
+	'marital_status',
+	'sex',
+	'year_of_diagnosis'
+]
+# SickleInAfrica standard data elements
+SIA_STD_ELEMENTS = SIA_BASE_ELEMENTS + [
+	'scd_test_result_ss_sbthal'
+]
+
+
 def main():
 
 	inbname   = 'raw' 	# input file base name
@@ -73,6 +86,10 @@ def getShellArguments():
 		'--repDir',
 		type=str,
 		help='path to temporary quality reports storage directory')
+	parser.add_argument(
+		'--maxAge',
+		type=int,
+		help='maximum plausible age of a patient')
 
 	return parser.parse_args()
 

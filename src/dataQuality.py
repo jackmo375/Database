@@ -75,7 +75,10 @@ def integrity(data, summary_info, args):
 	Concrete measure: Provide the number of data elements consistent with its value or content
 
 	'''
-	pass
+	# SIA Base elements:
+	is_valid_age = (data['age_at_enrollment'] > 0) & (data['age_at_enrollment'] < args.maxAge)
+	print(data[is_valid_age])
+
 
 def accuracy(data, summary_info, args):
 	'''

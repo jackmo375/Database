@@ -16,7 +16,9 @@ class Checklist:
 		'year_of_diagnosis'
 	]
 	# SickleInAfrica standard data elements
-	SIA_STD_ELEMENTS = SIA_BASE_ELEMENTS + [] 
+	SIA_STD_ELEMENTS = SIA_BASE_ELEMENTS + [
+		'scd_test_result_ss_sbthal'
+	]
 
 	def __init__(
 			self,
@@ -25,13 +27,15 @@ class Checklist:
 			n_elements,
 			n_duplicates, 
 			n_missing_values,
-			frac_missing):
+			frac_missing,
+			n_records_removed):
 		self.n_base_elements = n_base_elements
 		self.n_std_elements = n_std_elements
 		self.n_elements = n_elements
 		self.n_duplicates = n_duplicates
 		self.n_missing_values = n_missing_values
 		self.frac_missing = frac_missing
+		self.n_records_removed = n_records_removed
 
 
 	def write_long_report(self, fname):
@@ -54,6 +58,9 @@ class Checklist:
 		outStream.write(
 			'number of standard data elements collected: ' 
 			+ str(self.n_std_elements) + '\n')
+		outStream.write(
+			'number of unique records removed: '
+			+ str(self.n_records_removed) + '\n')
 		outStream.write(
 			'# Validity\n'
 			+ 'standard elements / total elements collected: ' 
@@ -92,4 +99,4 @@ class Checklist:
 #
 def create_empty_checklist():
 
-	return Checklist(0,0,0,0,0,0)
+	return Checklist(0,0,0,0,0,0,0)
