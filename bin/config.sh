@@ -1,6 +1,6 @@
 # enviroment shell variables
 ## change to ones appropriate for your machine
-database=/home/jack/Local/SickleAfrica/Database/
+database=/Users/mack/Jack/Local/SickleAfrica/Database/
 
 dat=${database}data/
 src=${database}src/

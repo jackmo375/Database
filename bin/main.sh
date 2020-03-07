@@ -8,7 +8,7 @@
 #!/bin/bash
 
 source ./config.sh
-source ./secret.sh
+source ./secret.sh	# defines ${user}, ${user_pswd}
 
 #
 #	Pipeline
