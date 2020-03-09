@@ -10,19 +10,10 @@ import sys
 import argparse
 import pandas as pd
 
-import dataQuality, checklist
-
-SIA_BASE_ELEMENTS = [
-	'age_at_enrollment',
-	'age_at_today',
-	'marital_status',
-	'sex',
-	'year_of_diagnosis'
-]
-# SickleInAfrica standard data elements
-SIA_STD_ELEMENTS = SIA_BASE_ELEMENTS + [
-	'scd_test_result_ss_sbthal'
-]
+# Local modules:
+import dataElements
+import dataQuality
+import cleaningReport
 
 
 def main():
@@ -34,10 +25,11 @@ def main():
 
 	# import raw data
 	infname = args.tempDir + inbname + '.csv'	# input file name
-	data = pd.read_csv(infname)					# import as pandas dataframe
+	data = pd.read_csv(infname, dtype=object)	# import as pandas dataframe
+	data.set_index('record_id')
 
 	# initialize summary object
-	summary_info = checklist.create_empty_checklist()
+	summary_info = cleaningReport.create_empty_report()
 
 	# -PERFORMING QUALITY CHECKS-
 	
@@ -65,12 +57,8 @@ def main():
 
 	# output cleaned file
 	outfname = args.tempDir + outbname + '.csv' # output file name
-	data.to_csv(outfname)
+	data.to_csv(outfname, index=False)
 
-
-#
-#  Functions
-#
 
 def getShellArguments():
 	'''
@@ -93,9 +81,6 @@ def getShellArguments():
 
 	return parser.parse_args()
 
-#
-#  Boilerplate
-#
 
 if __name__ == '__main__':
 	main()

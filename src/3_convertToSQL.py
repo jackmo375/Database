@@ -9,17 +9,8 @@
 
 import csv, argparse
 
-SIA_BASE_ELEMENTS = [
-	'age_at_enrollment',
-	'age_at_today',
-	'marital_status',
-	'sex',
-	'year_of_diagnosis'
-]
-# SickleInAfrica standard data elements
-SIA_STD_ELEMENTS = SIA_BASE_ELEMENTS + [
-	'scd_test_result_ss_sbthal'
-] 
+# Local modules
+import dataElements
 
 def main():
 
@@ -49,7 +40,7 @@ def main():
 		row = next(csv_reader)
 		value_string = '\t('
 		for j, field in enumerate(headers):
-			if field in SIA_STD_ELEMENTS:
+			if field in dataElements.SIA_BASE_ELEMENTS:
 				if row[j] is not None:
 					value_string = value_string + row[j] + ','
 				else:
@@ -63,7 +54,7 @@ def main():
 			value_string = ',\n\t('
 
 			for j, field in enumerate(headers):
-				if field in SIA_STD_ELEMENTS:
+				if field in dataElements.SIA_BASE_ELEMENTS:
 					if row[j] != '':
 						value_string = value_string + row[j] + ','
 					else:

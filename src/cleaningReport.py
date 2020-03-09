@@ -3,23 +3,7 @@
 #
 #####################
 
-#
-#  Class defintion
-#
-class Checklist:
-	# SickleInAfrica base data elements
-	SIA_BASE_ELEMENTS = [
-		'age_at_enrollment',
-		'age_at_today',
-		'marital_status',
-		'sex',
-		'year_of_diagnosis'
-	]
-	# SickleInAfrica standard data elements
-	SIA_STD_ELEMENTS = SIA_BASE_ELEMENTS + [
-		'scd_test_result_ss_sbthal'
-	]
-
+class Report:
 	def __init__(
 			self,
 			n_base_elements,
@@ -65,6 +49,7 @@ class Checklist:
 			'# Validity\n'
 			+ 'standard elements / total elements collected: ' 
 			+ str(self.n_std_elements/self.n_elements) + '\n')
+		# Consistency
 		outStream.write(
 			'# Consistency\n'
 			+ 'number of duplicates removed: '
@@ -94,9 +79,11 @@ class Checklist:
 
 		outStream.close()
 
-#
-#  Constructors
-#
-def create_empty_checklist():
 
-	return Checklist(0,0,0,0,0,0,0)
+def create_empty_report():
+	''''
+	Report class constructor:
+
+	creates an empty Report object
+	'''
+	return Report(0,0,0,0,0,0,0)

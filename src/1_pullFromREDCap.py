@@ -9,6 +9,7 @@ All rights reserved.
 
 import sys, os, re, subprocess, argparse
 import stat, time
+import pandas as pd
 
 from datetime import timedelta, date
 
@@ -20,7 +21,9 @@ def main():
 
 	args = getShellArguments()
 
-	# Calling datasets fron SPARCo sites here
+	outLabel  = 'raw' # output file label
+
+	# Calling datasets from SPARCo sites here
 	data = subprocess.check_output(
 		["/bin/sh", 
 		"-c", 
@@ -40,8 +43,15 @@ def main():
 		Data[tline[0]] = eval(tline[1]); Data[tline[0]]['country'] = 'tz'
 		Elements |= set(Data[tline[0]].keys())
 
-	print(Elements)
-	print(len(Elements))
+	df = pd.DataFrame.from_dict(Data, orient='index', dtype=object)
+	df.set_index('record_id')
+
+	# save as csv file for cleaning:
+	outName = args.tempDir + outLabel + '.csv' # output file name
+	df.to_csv(outName, index=False)
+
+	print(df.head())
+	print("Number of data fields in incoming data: " + str(len(Elements)))
 
 
 def ttype(s):

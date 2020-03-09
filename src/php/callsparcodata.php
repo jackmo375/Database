@@ -13,16 +13,6 @@ include 'config.php';
 // either new or old, it should live at most for another hour
 $_SESSION['discard_after'] = $now + 3600;
 
-# check command line arguments passed successfully:
-if (isset($argc)) {
-  for ($i=0; $i<$argc; $i++) {
-    echo "Argument #".$i." - ".$argv[$i]."\n";
-  }
-}
-else {
-  echo "argc and argv disabled\n";
-}
-
 function export_records($type='flat', $records=array(), $events=array(), $fields=array(), $forms=array()){
 	global $api_url, $api_token;
 	# an array containing all the elements that must be submitted to the API
