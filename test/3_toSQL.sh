@@ -21,7 +21,7 @@ echo "Converting cleaned data to SQL format (including normalisation)..."
 python3 ${src}3_convertToSQL.py  \
 	--tempDir ${dat} \
 	--repDir  ${rep} \
-	--dbName  ${dbName} && echo "Done."
+	--dbName  ${dbName} && echo "...done."
 
 # exit python virtual enviroment
 deactivate

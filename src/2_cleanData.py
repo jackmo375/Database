@@ -53,6 +53,9 @@ def main():
 
 	# print data cleaning summary reports
 
+	print("Records rejected after cleaning:")
+	print(summary_info.df_records_removed)
+
 	summary_info.write_long_report(args.repDir + 'cleaningReport.long.md')
 
 	# output cleaned file

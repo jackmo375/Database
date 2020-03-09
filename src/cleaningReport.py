@@ -3,6 +3,8 @@
 #
 #####################
 
+import pandas as pd
+
 class Report:
 	def __init__(
 			self,
@@ -20,6 +22,8 @@ class Report:
 		self.n_missing_values = n_missing_values
 		self.frac_missing = frac_missing
 		self.n_records_removed = n_records_removed
+
+		self.df_records_removed = pd.DataFrame(columns=['record_id', 'rejected_field'])
 
 
 	def write_long_report(self, fname):
