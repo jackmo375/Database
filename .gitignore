@@ -1,5 +1,9 @@
 data/*
 bin/secret.sh
+mysql/*
+bin/all.sh
+bin/createDB.sh
+bin/dropDB.sh
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
