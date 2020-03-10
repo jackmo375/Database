@@ -1,19 +1,29 @@
+SICKLE IN AFRICA
+data transfer report 2020-03-10
+
 + Summary of data collection:
 SIA base elements           80
 SIA standardized elements   1494
-data elements collected     26
-*base* elements collected   7
-standard elements collected 7
+data elements collected     25
+*base* elements collected   6
+standard elements collected 6
 **Note** some of the standardized elements have been removed for de-identification.
 
-duplicates 0
++ Records rejected after cleaning:
+                            rejected_field
+2-1                      year_of_diagnosis
+2-330                    year_of_diagnosis
+3-74                     year_of_diagnosis
+3-122  age_at_today WITH age_at_enrollment
+
+duplicates 623
 
 + Records found with invalid year_of_diagnosis values:
-     record_id year_of_diagnosis     rejected_field
-444      2-330             20202  year_of_diagnosis
-537        2-1             22017  year_of_diagnosis
-756       3-74              2814  year_of_diagnosis
-2120     2-158             22017  year_of_diagnosis
+          year_of_diagnosis     rejected_field
+record_id                                     
+2-1                   22017  year_of_diagnosis
+2-330                 20202  year_of_diagnosis
+3-74                   2814  year_of_diagnosis
 
 + Records found with invalid age_at_today values:
 None
@@ -22,24 +32,16 @@ None
 None
 
 + Records found with conflicting age_at_enrollment, age_at_today values:
-     record_id age_at_enrollment age_at_today                       rejected_field
-1163     3-122                 9            7  age_at_today WITH age_at_enrollment
+          age_at_enrollment age_at_today                       rejected_field
+record_id                                                                    
+3-122                     9            7  age_at_today WITH age_at_enrollment
 
 + Missing base values:
-using_hydroxyurea             50
-antimalaria_prophylaxis       19
-penicillin_v_prophylaxis      24
-year_of_diagnosis             53
-record_id                      0
-pneumococcal_vacc_uptodate    12
-folic_acid                    13
+pneumococcal_vacc_uptodate    11
+using_hydroxyurea             49
+penicillin_v_prophylaxis      23
+year_of_diagnosis             51
+antimalaria_prophylaxis       18
+folic_acid                    12
 dtype: int64
-
-+ Records rejected after cleaning:
-     record_id                       rejected_field
-444      2-330                    year_of_diagnosis
-537        2-1                    year_of_diagnosis
-756       3-74                    year_of_diagnosis
-2120     2-158                    year_of_diagnosis
-1163     3-122  age_at_today WITH age_at_enrollment
 

@@ -26,7 +26,7 @@ def main():
 	# import raw data
 	infname = args.tempDir + inbname + '.csv'	# input file name
 	data = pd.read_csv(infname, dtype=object)	# import as pandas dataframe
-	data.set_index('record_id')
+	data.set_index('record_id', inplace=True)
 
 	# initialize summary object
 	summary_info = cleaningReport.create_empty_report()
@@ -51,13 +51,16 @@ def main():
 
 	# -END OF QUALITY CHECKS-
 
+	dataQuality.delete_records(data, summary_info, args)
+
 	# print data cleaning summary reports
 
 	summary_info.write_long_report(args.repDir + 'cleaningReport.long.txt')
+	summary_info.write_short_report(args.repDir + 'cleaningReport.short.txt')
 
 	# output cleaned file
 	outfname = args.tempDir + outbname + '.csv' # output file name
-	data.to_csv(outfname, index=False)
+	data.to_csv(outfname)
 
 
 def getShellArguments():

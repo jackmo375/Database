@@ -4,6 +4,7 @@
 #####################
 
 import pandas as pd
+import datetime
 
 # local modules:
 import dataElements
@@ -11,7 +12,7 @@ import dataElements
 class Report:
 	def __init__(self):
 
-		self.df_records_removed = pd.DataFrame(columns=['record_id', 'rejected_field'])
+		self.df_records_removed = pd.DataFrame(columns=['rejected_field'])
 
 
 	def n_elements_collected(self):
@@ -47,7 +48,9 @@ class Report:
 		did not pass cleaning checks.
 		'''
 
-		report_str = ''
+		report_str = 'SICKLE IN AFRICA\n' \
+			+ 'data transfer report ' + str(datetime.date.today()) + '\n'
+		report_str += '\n' 
 
 		# Completeness:
 		report_str = report_str \
@@ -59,6 +62,11 @@ class Report:
 			+ "standard elements collected {}\n".format(self.n_std_elements_collected()) \
 			+ "**Note** some of the standardized elements have been removed for de-identification.\n"
 		report_str += '\n'
+
+		# Records rejected after cleaning:
+		report_str += "+ Records rejected after cleaning:\n" \
+			+ str(self.df_records_removed) + '\n' \
+			+ '\n'
 
 		# Consistency:
 		report_str += "duplicates {}\n".format(self.n_duplicates)
@@ -89,11 +97,6 @@ class Report:
 			+ str(self.missing_base_values) + '\n' \
 			+ '\n'
 
-		# Records rejected after cleaning:
-		report_str += "+ Records rejected after cleaning:\n" \
-			+ str(self.df_records_removed) + '\n' \
-			+ '\n'
-
 		outStream = open(fname, 'w')
 		outStream.write(report_str)
 		outStream.close()
@@ -108,10 +111,14 @@ class Report:
 		the correct '.htm' extension. 
 		'''
 
+		report_str = 'SICKLE IN AFRICA\n' \
+			+ 'database update ' + str(datetime.date.today()) + '\n'
+		report_str += '\n'
+
+		report_str += str(self.n_records_uploaded)+" records uploaded from tz"
+
 		outStream = open(fname, 'w')
-
-		# write report here....
-
+		outStream.write(report_str)
 		outStream.close()
 
 

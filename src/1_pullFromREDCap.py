@@ -44,11 +44,11 @@ def main():
 		Elements |= set(Data[tline[0]].keys())
 
 	df = pd.DataFrame.from_dict(Data, orient='index', dtype=object)
-	df.set_index('record_id')
+	df.set_index('record_id', inplace=True)
 
 	# save as csv file for cleaning:
 	outName = args.tempDir + outLabel + '.csv' # output file name
-	df.to_csv(outName, index=False)
+	df.to_csv(outName)
 
 	print(df.head())
 	print("Number of data fields in incoming data: " + str(len(Elements)))

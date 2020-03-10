@@ -113,33 +113,33 @@ def consistency(data, summary_info, args):
 	# invalid dates
 	if 'year_of_diagnosis' in data.columns:
 		data_notNull = data[data.year_of_diagnosis.notnull()]
-		summary_info.invalid_years = data_notNull[(data_notNull.year_of_diagnosis.astype(int) < 0) | (data_notNull.year_of_diagnosis.astype(int) > datetime.datetime.now().year)][['record_id', 'year_of_diagnosis']]
+		summary_info.invalid_years = data_notNull[(data_notNull.year_of_diagnosis.astype(int) < 0) | (data_notNull.year_of_diagnosis.astype(int) > datetime.datetime.now().year)][['year_of_diagnosis']]
 		summary_info.invalid_years['rejected_field'] = 'year_of_diagnosis'
-		summary_info.df_records_removed = summary_info.df_records_removed.append(summary_info.invalid_years[['record_id', 'rejected_field']])
+		summary_info.df_records_removed = summary_info.df_records_removed.append(summary_info.invalid_years[['rejected_field']])
 	
 	# invalid ages
 	if 'age_at_today' in data.columns:
 		data_notNull = data[data.age_at_today.notnull()]
-		summary_info.invalid_age_at_today = data_notNull[(data_notNull.age_at_today.astype(int) < 0) | (data_notNull.age_at_today.astype(int) > args.maxAge)][['record_id', 'age_at_today']]
+		summary_info.invalid_age_at_today = data_notNull[(data_notNull.age_at_today.astype(int) < 0) | (data_notNull.age_at_today.astype(int) > args.maxAge)][['age_at_today']]
 		summary_info.invalid_age_at_today['rejected_field'] = 'age_at_today'
-		summary_info.df_records_removed = summary_info.df_records_removed.append(summary_info.invalid_age_at_today[['record_id', 'rejected_field']])
+		summary_info.df_records_removed = summary_info.df_records_removed.append(summary_info.invalid_age_at_today[['rejected_field']])
 
 	if 'age_at_enrollment' in data.columns:
 		data_notNull = data[data.age_at_enrollment.notnull()]
-		summary_info.invalid_age_at_enrol = data_notNull[(data_notNull.age_at_enrollment.astype(int) < 0) | (data_notNull.age_at_enrollment.astype(int) > args.maxAge)][['record_id', 'age_at_enrollment']]		
+		summary_info.invalid_age_at_enrol = data_notNull[(data_notNull.age_at_enrollment.astype(int) < 0) | (data_notNull.age_at_enrollment.astype(int) > args.maxAge)][['age_at_enrollment']]		
 		summary_info.invalid_age_at_enrol['rejected_field'] = 'age_at_enrollment'
-		summary_info.df_records_removed = summary_info.df_records_removed.append(summary_info.invalid_age_at_enrol[['record_id', 'rejected_field']])
+		summary_info.df_records_removed = summary_info.df_records_removed.append(summary_info.invalid_age_at_enrol[['rejected_field']])
 
 		if 'age_at_today' in data.columns:
 			data_notNull = data[(data.age_at_enrollment.notnull()) & (data.age_at_today.notnull())]
-			summary_info.conflicting_ages = data_notNull[data_notNull.age_at_enrollment.astype(int) > data_notNull.age_at_today.astype(int)][['record_id', 'age_at_enrollment', 'age_at_today']]
+			summary_info.conflicting_ages = data_notNull[data_notNull.age_at_enrollment.astype(int) > data_notNull.age_at_today.astype(int)][['age_at_enrollment', 'age_at_today']]
 			summary_info.conflicting_ages['rejected_field'] = 'age_at_today WITH age_at_enrollment'
-			summary_info.df_records_removed = summary_info.df_records_removed.append(summary_info.conflicting_ages[['record_id', 'rejected_field']])
+			summary_info.df_records_removed = summary_info.df_records_removed.append(summary_info.conflicting_ages[['rejected_field']])
 
 
 def timeliness(data, summary_info, args):
 	'''
-	timeless metric
+	timeliness metric
 
 	Description: Is data available for transfer to the central database in a timely manner?
 	Concrete measure: Provide the quantity of records transferred with respect to indicators
@@ -157,3 +157,12 @@ def missingValues(data, summary_info, args):
 
 	collected_base_elements = list(set(data.columns) & set(dataElements.SIA_BASE_ELEMENTS))
 	summary_info.missing_base_values = data[collected_base_elements].isnull().sum()
+
+
+def delete_records(data, summary_info, args):
+	'''
+	Delete all records flagged in the summary_info.df_records_removed table
+	'''
+	data.drop(summary_info.df_records_removed.index, axis=0, inplace=True)
+
+	summary_info.n_records_uploaded = len(data)

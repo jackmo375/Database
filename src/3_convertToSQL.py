@@ -2,8 +2,9 @@
 #	SICKLE IN AFRICA
 #	automatic data transfer protocol
 #
-#	pipeline step 4: converting clean data to SQL 
-#	format, including any data normalisation.
+#	pipeline step 3: converting clean data to SQL 
+#	format, including any data normalisation, and
+#	uploading to the database.
 #
 ######################################################
 
@@ -23,7 +24,7 @@ def main():
 	# import raw data
 	infname  = args.tempDir + flabel + '.csv'
 	data = pd.read_csv(infname, dtype=object)	# import as pandas dataframe
-	data.set_index('record_id')
+	data.set_index('record_id', inplace=True)
 
 	engine = db.create_engine(
 		'mysql+pymysql://'
