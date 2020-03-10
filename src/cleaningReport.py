@@ -85,15 +85,18 @@ class Report:
 			self.conflicting_ages)
 
 		# Missing values:
-		print('+ Missing base values:')
-		print(self.missing_base_values)
-		print()
+		report_str += '+ Missing base values:\n' \
+			+ str(self.missing_base_values) + '\n' \
+			+ '\n'
 
 		# Records rejected after cleaning:
-		print("+ Records rejected after cleaning:")
-		print(self.df_records_removed)
+		report_str += "+ Records rejected after cleaning:\n" \
+			+ str(self.df_records_removed) + '\n' \
+			+ '\n'
 
-		print(report_str)
+		outStream = open(fname, 'w')
+		outStream.write(report_str)
+		outStream.close()
 
 
 	def write_short_report(self, fname):

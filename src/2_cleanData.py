@@ -53,7 +53,7 @@ def main():
 
 	# print data cleaning summary reports
 
-	summary_info.write_long_report(args.repDir + 'cleaningReport.long.md')
+	summary_info.write_long_report(args.repDir + 'cleaningReport.long.txt')
 
 	# output cleaned file
 	outfname = args.tempDir + outbname + '.csv' # output file name
