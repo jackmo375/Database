@@ -39,28 +39,7 @@ def completeness(data, summary_info, args):
 		args (argparse object): arguments passed down from the shell. 
 	'''
 
-	summary_info.n_base_elements = len(set(data.columns).intersection(dataElements.SIA_BASE_ELEMENTS))
-
-	print("")
-	print(
-		"SIA base elements           {}".format(len(dataElements.SIA_BASE_ELEMENTS)))
-	print(
-		"SIA standardized elements   {}".format(len(dataElements.SIA_STD_ELEMENTS)))
-	print(
-		"data elements collected     {}".format(len(data.columns)))
-	print(
-		"*base* elements collected   {}".format(
-			summary_info.n_base_elements, 
-			len(dataElements.SIA_BASE_ELEMENTS)))
-	print(
-		"standard elements collected {}".format(
-			len(set(data.columns).intersection(dataElements.SIA_STD_ELEMENTS))))
-	print("**Note** some of the standardized elements have been removed for de-identification.\n")
-
-	summary_info.n_data_types = data.dtypes
-	summary_info.n_data_descriptions = data.describe()
-	#summary_info.data_info = data.info()
-	summary_info.data_head = data.head()
+	summary_info.elements_collected = data.columns
 
 
 def validity(data, summary_info, args):
@@ -135,45 +114,27 @@ def consistency(data, summary_info, args):
 	if 'year_of_diagnosis' in data.columns:
 		data_notNull = data[data.year_of_diagnosis.notnull()]
 		summary_info.invalid_years = data_notNull[(data_notNull.year_of_diagnosis.astype(int) < 0) | (data_notNull.year_of_diagnosis.astype(int) > datetime.datetime.now().year)][['record_id', 'year_of_diagnosis']]
-		print("+ Records found with invalid year_of_diagnosis values:")
-		print(summary_info.invalid_years)
 		summary_info.invalid_years['rejected_field'] = 'year_of_diagnosis'
 		summary_info.df_records_removed = summary_info.df_records_removed.append(summary_info.invalid_years[['record_id', 'rejected_field']])
-		print("")
-	else:
-		print('year_of_diagnosis field not recorded')
-
+	
 	# invalid ages
 	if 'age_at_today' in data.columns:
 		data_notNull = data[data.age_at_today.notnull()]
 		summary_info.invalid_age_at_today = data_notNull[(data_notNull.age_at_today.astype(int) < 0) | (data_notNull.age_at_today.astype(int) > args.maxAge)][['record_id', 'age_at_today']]
-		print("+ Records found with invalid age_at_today values:")
-		print(summary_info.invalid_age_at_today)
 		summary_info.invalid_age_at_today['rejected_field'] = 'age_at_today'
 		summary_info.df_records_removed = summary_info.df_records_removed.append(summary_info.invalid_age_at_today[['record_id', 'rejected_field']])
-		print("")
-	else:
-		print('age_at_today field not recorded')
 
 	if 'age_at_enrollment' in data.columns:
 		data_notNull = data[data.age_at_enrollment.notnull()]
-		summary_info.invalid_age_at_enrol = data_notNull[(data_notNull.age_at_enrollment.astype(int) < 0) | (data_notNull.age_at_enrollment.astype(int) > args.maxAge)][['record_id', 'age_at_enrollment']]
-		print("+ Records found with invalid age_at_enrollment values:")
-		print(summary_info.invalid_age_at_enrol)
+		summary_info.invalid_age_at_enrol = data_notNull[(data_notNull.age_at_enrollment.astype(int) < 0) | (data_notNull.age_at_enrollment.astype(int) > args.maxAge)][['record_id', 'age_at_enrollment']]		
 		summary_info.invalid_age_at_enrol['rejected_field'] = 'age_at_enrollment'
 		summary_info.df_records_removed = summary_info.df_records_removed.append(summary_info.invalid_age_at_enrol[['record_id', 'rejected_field']])
-		print("")
 
 		if 'age_at_today' in data.columns:
 			data_notNull = data[(data.age_at_enrollment.notnull()) & (data.age_at_today.notnull())]
 			summary_info.conflicting_ages = data_notNull[data_notNull.age_at_enrollment.astype(int) > data_notNull.age_at_today.astype(int)][['record_id', 'age_at_enrollment', 'age_at_today']]
-			print("+ Records found with conflicting age_at_enrollment and age_at_today values:")
-			print(summary_info.conflicting_ages)
 			summary_info.conflicting_ages['rejected_field'] = 'age_at_today WITH age_at_enrollment'
 			summary_info.df_records_removed = summary_info.df_records_removed.append(summary_info.conflicting_ages[['record_id', 'rejected_field']])
-			print("")
-	else:
-		print('age_at_enrollment field not recorded')
 
 
 def timeliness(data, summary_info, args):
@@ -192,7 +153,7 @@ def missingValues(data, summary_info, args):
 	Summarise the missing values in the input raw data file
 	'''
 	# number of values missing:
-	summary_info.n_missing_values = data.isnull().sum().sum()
-	summary_info.frac_missing \
-		= summary_info.n_missing_values / (len(data.columns) * len(data))
+	summary_info.missing_values = data.isnull().sum()
 
+	collected_base_elements = list(set(data.columns) & set(dataElements.SIA_BASE_ELEMENTS))
+	summary_info.missing_base_values = data[collected_base_elements].isnull().sum()
