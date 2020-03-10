@@ -33,16 +33,14 @@ python3 ${src}2_cleanData.py \
 	--repDir  ${rep} \
 	--maxAge  ${maxAge} && echo '...done.'
 
-# 3. convert clean data to SQL format (including normalisation)
-echo "Converting cleaned data to SQL format (including normalisation)..."
+# 3. convert clean data to SQL (including normalisation) and upload to database
+echo "Uploading clean data to database..."
 python3 ${src}3_convertToSQL.py  \
 	--tempDir ${dat} \
 	--repDir  ${rep} \
-	--dbName  ${dbName} && echo "...done."
-
-# 4. send clean data to SIA database
-echo "Sending cleaned data to database..."
-mysql -u ${db_user} -p${db_user_pswd} < ${dat}clean.sql && echo "...done."
+	--dbName  ${dbName} \
+	--dbUser  ${db_user} \
+	--dbPswd  ${db_user_pswd} && echo "...done."
 
 # 5. distribute quality reports
 
