@@ -8,7 +8,7 @@
 #!/bin/bash
 
 source ./config.sh
-source ./secret.sh	# imports: site_url, api_url, api_token, db_user, db_user_pswd
+source ./secret.sh	# imports: site_url, api_url, api_token, db_user, db_user_pswd, from_add, from_add_pswd, to_add
 
 #
 #	Pipeline
@@ -24,14 +24,14 @@ python3 ${src}1_pullFromREDCap.py \
 	--tempDir ${dat} \
 	--siteURL ${site_url} \
 	--apiURL  ${api_url} \
-	--apiTok  ${api_token} && echo '...done.'
+	--apiTok  ${api_token} && echo '...done.' || echo '...failed!'; exit 1
 
 # 2. clean data
 echo 'Cleaning raw data...'
 python3 ${src}2_cleanData.py \
 	--tempDir ${dat} \
 	--repDir  ${rep} \
-	--maxAge  ${maxAge} && echo '...done.'
+	--maxAge  ${maxAge} && echo '...done.' || echo '...failed!'; exit 1
 
 # 3. convert clean data to SQL (including normalisation) and upload to database
 echo "Uploading clean data to database..."
@@ -40,9 +40,15 @@ python3 ${src}3_convertToSQL.py  \
 	--repDir  ${rep} \
 	--dbName  ${dbName} \
 	--dbUser  ${db_user} \
-	--dbPswd  ${db_user_pswd} && echo "...done."
+	--dbPswd  ${db_user_pswd} && echo "...done." || echo '...failed!'; exit 1
 
-# 5. distribute quality reports
+# 4. distribute quality reports
+echo "Emailing data cleaning reports..."
+python3 ${src}4_emailReports.py \
+	--repDir   ${rep} \
+	--fromAdd  ${from_add} \
+	--fromPswd ${from_add_pswd} \
+	--toAdd    ${to_add} && echo "...done." || echo '...failed!'; exit 1
 
 # exit python virtual enviroment
 deactivate

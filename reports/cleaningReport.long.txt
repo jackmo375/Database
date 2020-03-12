@@ -1,5 +1,5 @@
 SICKLE IN AFRICA
-data transfer report 2020-03-10
+data transfer report 2020-03-12
 
 + Summary of data collection:
 SIA base elements           80
@@ -37,11 +37,11 @@ record_id
 3-122                     9            7  age_at_today WITH age_at_enrollment
 
 + Missing base values:
-pneumococcal_vacc_uptodate    11
+year_of_diagnosis             51
+folic_acid                    12
 using_hydroxyurea             49
 penicillin_v_prophylaxis      23
-year_of_diagnosis             51
+pneumococcal_vacc_uptodate    11
 antimalaria_prophylaxis       18
-folic_acid                    12
 dtype: int64
 
