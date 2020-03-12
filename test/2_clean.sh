@@ -21,7 +21,7 @@ echo 'Cleaning raw data...'
 python3 ${src}2_cleanData.py \
 	--tempDir ${dat} \
 	--repDir  ${rep} \
-	--maxAge  ${maxAge} && echo '...done.'
+	--maxAge  ${maxAge} || { echo '...failed!'; exit 1; } && echo '...done.'
 
 # exit python virtual enviroment
 deactivate

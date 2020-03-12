@@ -23,7 +23,7 @@ python3 ${src}3_convertToSQL.py  \
 	--repDir  ${rep} \
 	--dbName  ${dbName} \
 	--dbUser  ${db_user} \
-	--dbPswd  ${db_user_pswd} && echo "...done."
+	--dbPswd  ${db_user_pswd} || { echo '...failed!'; exit 1; } && echo '...done.'
 
 # exit python virtual enviroment
 deactivate

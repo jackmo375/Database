@@ -23,7 +23,7 @@ python3 ${src}1_pullFromREDCap.py \
 	--tempDir ${dat} \
 	--siteURL ${site_url} \
 	--apiURL  ${api_url} \
-	--apiTok  ${api_token} && echo "...done." || echo '...failed!'; exit 1
+	--apiTok  ${api_token} || { echo '...failed!'; exit 1; } && echo '...done.'
 
 # exit python virtual enviroment
 deactivate

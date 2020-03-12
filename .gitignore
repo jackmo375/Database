@@ -4,6 +4,7 @@ mysql/*
 bin/all.sh
 bin/createDB.sh
 bin/dropDB.sh
+*.DS_Store*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

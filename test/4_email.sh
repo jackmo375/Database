@@ -22,7 +22,7 @@ python3 ${src}4_emailReports.py \
 	--repDir   ${rep} \
 	--fromAdd  ${from_add} \
 	--fromPswd ${from_add_pswd} \
-	--toAdd    ${to_add} && echo "...done."
+	--toAdd    ${to_add} || { echo '...failed!'; exit 1; } && echo '...done.'
 
 # exit python virtual enviroment
 deactivate
